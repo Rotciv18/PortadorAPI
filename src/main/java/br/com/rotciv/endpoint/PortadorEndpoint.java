@@ -1,5 +1,6 @@
 package br.com.rotciv.endpoint;
 
+import br.com.rotciv.error.ResourceNotFoundException;
 import br.com.rotciv.model.Cartao;
 import br.com.rotciv.model.Portador;
 import br.com.rotciv.repository.CartaoRepositorio;
@@ -30,8 +31,7 @@ public class PortadorEndpoint {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getPortadorById(@PathVariable("id") Long id){
-        if (!checkPortadorId(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        checkPortadorById(id);
 
         return new ResponseEntity<>(portadorDAO.findById(id), HttpStatus.OK);
     }
@@ -52,8 +52,7 @@ public class PortadorEndpoint {
     }
     @PutMapping(path = "/{id}/addCartao")
     public ResponseEntity<?> putCartao(@PathVariable("id") Long id){
-        if (!checkPortadorId(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        checkPortadorById(id);
 
         Portador portador = portadorDAO.findById(id).get();
         Cartao cartao = new Cartao(portador.getNome());
@@ -67,8 +66,7 @@ public class PortadorEndpoint {
 
     @PutMapping
     public ResponseEntity<?> editPortador(@RequestBody Portador portador){
-        if (!checkPortadorId(portador.getId()))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        checkPortadorById(portador.getId());
 
         return new ResponseEntity<>(portadorDAO.save(portador), HttpStatus.OK);
     }
@@ -76,15 +74,15 @@ public class PortadorEndpoint {
     @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePortador(@PathVariable("id") Long id){
-        if (!checkPortadorId(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        checkPortadorById(id);
 
         cartaoDAO.deleteAllByPortadorId(id);
         portadorDAO.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private boolean checkPortadorId(Long id){
-        return portadorDAO.existsById(id);
+    private void checkPortadorById(Long id){
+        if(!portadorDAO.existsById(id))
+            throw new ResourceNotFoundException("Portador não encontrado");
     }
 }

@@ -1,5 +1,6 @@
 package br.com.rotciv.endpoint;
 
+import br.com.rotciv.error.ResourceNotFoundException;
 import br.com.rotciv.model.Cartao;
 import br.com.rotciv.repository.CartaoRepositorio;
 import br.com.rotciv.repository.PortadorRepositorio;
@@ -27,8 +28,7 @@ public class CartaoEndpoint {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCartaoById(@PathVariable("id") Long id){
-        if (!checkCartaoId(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        checkCartaoById(id);
 
         Cartao cartao = cartaoDAO.findById(id).get();
         Long portador_id = cartao.getPortador().getId();
@@ -44,7 +44,8 @@ public class CartaoEndpoint {
         return portadorDAO.existsById(id);
     }
 
-    private boolean checkCartaoId(Long id){
-        return cartaoDAO.existsById(id);
+    private void checkCartaoById(Long id){
+        if(!cartaoDAO.existsById(id))
+            throw new ResourceNotFoundException("Cartão não encontrado");
     }
 }

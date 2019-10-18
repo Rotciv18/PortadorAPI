@@ -1,5 +1,6 @@
 package br.com.rotciv.endpoint;
 
+import br.com.rotciv.error.ResourceNotFoundException;
 import br.com.rotciv.model.Cartao;
 import br.com.rotciv.model.Lancamento;
 import br.com.rotciv.repository.CartaoRepositorio;
@@ -23,16 +24,14 @@ public class LancamentoEndpoint {
 
     @GetMapping("/{id}/lancamentos")
     public ResponseEntity<?> getLancamentosByCartaoId(@PathVariable("id") Long id){
-        if (!checkCartaoId(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        checkCartaoById(id);
 
         return new ResponseEntity<>(lancamentoDAO.findAllByCartaoId(id), HttpStatus.OK);
     }
 
     @PostMapping("/{id}/addlancamento")
     public ResponseEntity<?> putLancamento(@PathVariable("id") Long id, @RequestBody Lancamento lancamento){
-        if (!checkCartaoId(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        checkCartaoById(id);
 
         Cartao cartao = cartaoDAO.findById(id).get();
         lancamento.setCartao(cartao);
@@ -43,7 +42,22 @@ public class LancamentoEndpoint {
         return new ResponseEntity<>(lancamentoDAO.save(lancamento), HttpStatus.OK);
     }
 
-    private boolean checkCartaoId(Long id){
-        return cartaoDAO.existsById(id);
+    @DeleteMapping("/{id}/{lanc_id}")
+    public ResponseEntity<?> deleteLancamento(@PathVariable("id")Long id, @PathVariable("lanc_id")Long lanc_id){
+        checkCartaoById(id);
+        checkLancamentoById(lanc_id);
+
+        lancamentoDAO.deleteById(lanc_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void checkCartaoById(Long id){
+        if(!cartaoDAO.existsById(id))
+            throw new ResourceNotFoundException("Cartão não encontrado");
+    }
+
+    private void checkLancamentoById(Long id){
+        if (!lancamentoDAO.existsById(id))
+            throw new ResourceNotFoundException("Lançamento não encontrado");
     }
 }
