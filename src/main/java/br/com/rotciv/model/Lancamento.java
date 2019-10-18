@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class Lancamento extends AbstractEntity{
@@ -16,7 +15,11 @@ public class Lancamento extends AbstractEntity{
     private Cartao cartao;
     private String nomePortador;
     private String nomeDoProduto;
-    private Integer preco;
+    private Double preco;
+    @ManyToOne
+    @JoinColumn(name = "fatura_id")
+    @JsonIgnore
+    private Fatura fatura;
 
     public Lancamento() {
     }
@@ -37,11 +40,11 @@ public class Lancamento extends AbstractEntity{
         this.nomeDoProduto = nomeDoProduto;
     }
 
-    public Integer getPreco() {
+    public Double getPreco() {
         return preco;
     }
 
-    public void setPreco(Integer preco) {
+    public void setPreco(Double preco) {
         this.preco = preco;
     }
 
@@ -51,5 +54,13 @@ public class Lancamento extends AbstractEntity{
 
     public void setNomePortador(String nomePortador) {
         this.nomePortador = nomePortador;
+    }
+
+    public Fatura getFatura() {
+        return fatura;
+    }
+
+    public void setFatura(Fatura fatura) {
+        this.fatura = fatura;
     }
 }

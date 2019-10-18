@@ -2,24 +2,30 @@ package br.com.rotciv.endpoint;
 
 import br.com.rotciv.error.ResourceNotFoundException;
 import br.com.rotciv.model.Cartao;
+import br.com.rotciv.model.Fatura;
 import br.com.rotciv.model.Lancamento;
 import br.com.rotciv.repository.CartaoRepositorio;
+import br.com.rotciv.repository.FaturaRepositorio;
 import br.com.rotciv.repository.LancamentoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("portadores/cartoes")
 public class LancamentoEndpoint {
     private final CartaoRepositorio cartaoDAO;
     private final LancamentoRepositorio lancamentoDAO;
+    private final FaturaRepositorio faturaDAO;
 
     @Autowired
-    public LancamentoEndpoint(CartaoRepositorio cartaoDAO, LancamentoRepositorio lancamentoDAO) {
+    public LancamentoEndpoint(CartaoRepositorio cartaoDAO, LancamentoRepositorio lancamentoDAO, FaturaRepositorio faturaDAO) {
         this.cartaoDAO = cartaoDAO;
         this.lancamentoDAO = lancamentoDAO;
+        this.faturaDAO = faturaDAO;
     }
 
     @GetMapping("/{id}/lancamentos")
@@ -36,10 +42,16 @@ public class LancamentoEndpoint {
         Cartao cartao = cartaoDAO.findById(id).get();
         lancamento.setCartao(cartao);
         lancamento.setNomePortador(cartao.getNomePortador());
+        Fatura fatura = faturaDAO.findByCartaoId(id);
+        fatura.getLancamentos().add(lancamento);
+        fatura.atualizaValorTotal(lancamento);
+        lancamento.setFatura(fatura);
 
         cartao.getLancamentos().add(lancamento);
-        cartaoDAO.save(cartao);
-        return new ResponseEntity<>(lancamentoDAO.save(lancamento), HttpStatus.OK);
+        //cartaoDAO.save(cartao);
+        faturaDAO.save(fatura);
+        lancamentoDAO.save(lancamento);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/{lanc_id}")

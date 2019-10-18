@@ -2,8 +2,10 @@ package br.com.rotciv.endpoint;
 
 import br.com.rotciv.error.ResourceNotFoundException;
 import br.com.rotciv.model.Cartao;
+import br.com.rotciv.model.Fatura;
 import br.com.rotciv.model.Portador;
 import br.com.rotciv.repository.CartaoRepositorio;
+import br.com.rotciv.repository.FaturaRepositorio;
 import br.com.rotciv.repository.PortadorRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +19,13 @@ import javax.transaction.Transactional;
 public class PortadorEndpoint {
     private final PortadorRepositorio portadorDAO;
     private final CartaoRepositorio cartaoDAO;
+    private final FaturaRepositorio faturaDAO;
 
     @Autowired
-    public PortadorEndpoint(PortadorRepositorio propostaDAO, CartaoRepositorio cartaoDAO) {
+    public PortadorEndpoint(PortadorRepositorio propostaDAO, CartaoRepositorio cartaoDAO, FaturaRepositorio faturaDAO) {
         this.portadorDAO = propostaDAO;
         this.cartaoDAO = cartaoDAO;
+        this.faturaDAO = faturaDAO;
     }
 
     @GetMapping
@@ -41,9 +45,13 @@ public class PortadorEndpoint {
         Cartao cartao = new Cartao(portador.getNome());
         portador.getCartoes().add(cartao);
         cartao.setPortador(portador);
+        Fatura fatura = new Fatura();
+        fatura.setCartao(cartao);
         try {
             portadorDAO.save(portador);
             cartaoDAO.save(cartao);
+            faturaDAO.save(fatura);
+
             return new ResponseEntity<>(portador, HttpStatus.OK);
         } catch(Exception e) {
             e.printStackTrace();
@@ -58,9 +66,12 @@ public class PortadorEndpoint {
         Cartao cartao = new Cartao(portador.getNome());
         cartao.setPortador(portador);
         portador.getCartoes().add(cartao);
+        Fatura fatura = new Fatura();
+        fatura.setCartao(cartao);
 
         cartaoDAO.save(cartao);
         portadorDAO.save(portador);
+        faturaDAO.save(fatura);
         return new ResponseEntity<>(cartao, HttpStatus.OK);
     }
 

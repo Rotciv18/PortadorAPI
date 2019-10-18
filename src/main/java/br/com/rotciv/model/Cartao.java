@@ -18,9 +18,13 @@ public class Cartao extends AbstractEntity{
     @JoinColumn(name = "portador_id")
     @JsonIgnore
     private Portador portador;
-    @OneToMany(mappedBy = "cartao",
-                cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cartao" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Lancamento> lancamentos;
+    @OneToOne(mappedBy = "cartao",
+              cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Fatura fatura;
 
     public Cartao(String nomePortador) {
         this.dataVencimento = generateDataVencimento();
@@ -72,15 +76,22 @@ public class Cartao extends AbstractEntity{
         this.lancamentos = lancamentos;
     }
 
-    public String generateDataVencimento() {
+    public Fatura getFatura() {
+        return fatura;
+    }
+
+    public void setFatura(Fatura fatura) {
+        this.fatura = fatura;
+    }
+
+    private String generateDataVencimento() {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, 2);
 
         String data = format.format(calendar.getTime());
-        Date inActiveDate = null;
         try {
-            inActiveDate = format.parse(data);
+            format.parse(data);
         } catch (ParseException e) {
             e.printStackTrace();
         }

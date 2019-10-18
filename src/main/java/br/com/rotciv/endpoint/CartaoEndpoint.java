@@ -22,8 +22,8 @@ public class CartaoEndpoint {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCartoesByPortadorId(@PathVariable("id") Long id){
-        return new ResponseEntity<>(cartaoDAO.findAllByPortadorId(id), HttpStatus.OK);
+    public ResponseEntity<?> getCartaoById(@PathVariable("id") Long id){
+        return new ResponseEntity<>(cartaoDAO.findById(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
