@@ -38,11 +38,13 @@ public class LancamentoEndpoint {
         checkCartaoById(id);
 
         Cartao cartao = cartaoDAO.findById(id).get();
+        isCartaoAtivo(cartao);
+
         lancamento.setCartao(cartao);
         lancamento.setNomePortador(cartao.getNomePortador());
         Fatura fatura = faturaDAO.findByCartaoId(id);
         fatura.getLancamentos().add(lancamento);
-        fatura.atualizaValorTotal(lancamento);
+        fatura.atualizaValorTotal();
         lancamento.setFatura(fatura);
 
         cartao.getLancamentos().add(lancamento);
@@ -53,12 +55,32 @@ public class LancamentoEndpoint {
     }
 
     @DeleteMapping("/{id}/{lanc_id}")
-    public ResponseEntity<?> deleteLancamento(@PathVariable("id")Long id, @PathVariable("lanc_id")Long lanc_id){
+    public ResponseEntity<?> deleteLancamentoByCartaoIdAndLancamentoId(@PathVariable("id")Long id,
+                                                                       @PathVariable("lanc_id")Long lanc_id){
+
         checkCartaoById(id);
         checkLancamentoById(lanc_id);
+        isCartaoAtivo(cartaoDAO.findById(id).get());
 
         lancamentoDAO.deleteById(lanc_id);
+        Fatura fatura = faturaDAO.findByCartaoId(id);
+        fatura.atualizaValorTotal();
+        faturaDAO.save(fatura);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editLancamentoByCartaoId (@PathVariable("id")Long id,
+                                                       @RequestBody Lancamento lancamento){
+
+        checkCartaoById(id);
+        checkLancamentoById(lancamento.getId());
+
+        lancamentoDAO.save(lancamento);
+        Fatura fatura = faturaDAO.findByCartaoId(id);
+        fatura.atualizaValorTotal();
+
+        return new ResponseEntity<>(lancamento, HttpStatus.OK);
     }
 
     private void checkCartaoById(Long id){
@@ -69,5 +91,10 @@ public class LancamentoEndpoint {
     private void checkLancamentoById(Long id){
         if (!lancamentoDAO.existsById(id))
             throw new ResourceNotFoundException("Lançamento não encontrado");
+    }
+
+    private void isCartaoAtivo(Cartao cartao){
+        if (!cartao.isAtivo())
+            throw new ResourceNotFoundException("Este cartão está desativado");
     }
 }

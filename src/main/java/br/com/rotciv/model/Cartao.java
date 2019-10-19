@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +24,7 @@ public class Cartao extends AbstractEntity{
               cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Fatura fatura;
+    private boolean ativo = true;
 
     public Cartao(String nomePortador) {
         this.dataVencimento = generateDataVencimento();
@@ -82,6 +82,14 @@ public class Cartao extends AbstractEntity{
 
     public void setFatura(Fatura fatura) {
         this.fatura = fatura;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     private String generateDataVencimento() {

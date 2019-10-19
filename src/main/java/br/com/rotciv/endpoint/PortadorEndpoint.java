@@ -48,22 +48,6 @@ public class PortadorEndpoint {
     public void postPortador(@RequestBody Proposta proposta){
         propostaService.enviarProposta(proposta);
     }
-    @PutMapping(path = "/{id}/addCartao")
-    public ResponseEntity<?> putCartao(@PathVariable("id") Long id){
-        checkPortadorById(id);
-
-        Portador portador = portadorDAO.findById(id).get();
-        Cartao cartao = new Cartao(portador.getNome());
-        cartao.setPortador(portador);
-        portador.getCartoes().add(cartao);
-        Fatura fatura = new Fatura();
-        fatura.setCartao(cartao);
-
-        cartaoDAO.save(cartao);
-        portadorDAO.save(portador);
-        //faturaDAO.save(fatura);
-        return new ResponseEntity<>(cartao, HttpStatus.OK);
-    }
 
     @PutMapping
     public ResponseEntity<?> editPortador(@RequestBody Portador portador){

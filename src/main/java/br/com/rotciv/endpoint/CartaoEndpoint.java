@@ -1,5 +1,7 @@
 package br.com.rotciv.endpoint;
 
+import br.com.rotciv.model.Fatura;
+import br.com.rotciv.model.Portador;
 import br.com.rotciv.throwableResponses.ResourceNotFoundException;
 import br.com.rotciv.model.Cartao;
 import br.com.rotciv.repository.CartaoRepositorio;
@@ -26,18 +28,48 @@ public class CartaoEndpoint {
         return new ResponseEntity<>(cartaoDAO.findById(id), HttpStatus.OK);
     }
 
+    @PutMapping(path = "/{id}/addCartao")
+    public ResponseEntity<?> addCartaoByPortadorId(@PathVariable("id") Long id){
+        checkPortadorById(id);
+
+        Portador portador = portadorDAO.findById(id).get();
+        Cartao cartao = new Cartao(portador.getNome());
+        cartao.setPortador(portador);
+        portador.getCartoes().add(cartao);
+        Fatura fatura = new Fatura();
+        fatura.setCartao(cartao);
+
+        cartaoDAO.save(cartao);
+        portadorDAO.save(portador);
+        //faturaDAO.save(fatura);
+        return new ResponseEntity<>(cartao, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCartaoById(@PathVariable("id") Long id){
+    public ResponseEntity<?> desativarCartaoById(@PathVariable("id") Long id){
         checkCartaoById(id);
 
         Cartao cartao = cartaoDAO.findById(id).get();
-        Long portador_id = cartao.getPortador().getId();
-        cartaoDAO.deleteById(id);
+        cartao.setAtivo(false);
 
-        //Portador deve ser deletado se tiver nenhum cartão
-        if (portadorDAO.findById(portador_id).get().getCartoes().size() == 0)
-            portadorDAO.deleteById(portador_id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(cartaoDAO.save(cartao), HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> editCartaoById(@RequestBody Cartao cartao){
+        checkCartaoById(cartao.getId());
+
+        return new ResponseEntity<>(cartaoDAO.save(cartao), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/ativar")
+    public ResponseEntity<?> ativarCartaoById(@PathVariable("id") Long id){
+        checkCartaoById(id);
+
+        Cartao cartao = cartaoDAO.findById(id).get();
+        cartao.setAtivo(true);
+
+        return new ResponseEntity<>(cartaoDAO.save(cartao), HttpStatus.OK);
     }
 
     private boolean checkPortadorId(Long id){
@@ -47,5 +79,10 @@ public class CartaoEndpoint {
     private void checkCartaoById(Long id){
         if(!cartaoDAO.existsById(id))
             throw new ResourceNotFoundException("Cartão não encontrado");
+    }
+
+    private void checkPortadorById(Long id){
+        if(!portadorDAO.existsById(id))
+            throw new ResourceNotFoundException("Portador não encontrado");
     }
 }
