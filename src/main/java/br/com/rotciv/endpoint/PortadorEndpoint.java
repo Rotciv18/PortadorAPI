@@ -1,12 +1,14 @@
 package br.com.rotciv.endpoint;
 
-import br.com.rotciv.error.ResourceNotFoundException;
+import br.com.rotciv.throwableResponses.ResourceNotFoundException;
 import br.com.rotciv.model.Cartao;
 import br.com.rotciv.model.Fatura;
 import br.com.rotciv.model.Portador;
+import br.com.rotciv.model.Proposta;
 import br.com.rotciv.repository.CartaoRepositorio;
 import br.com.rotciv.repository.FaturaRepositorio;
 import br.com.rotciv.repository.PortadorRepositorio;
+import br.com.rotciv.services.PropostaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +22,14 @@ public class PortadorEndpoint {
     private final PortadorRepositorio portadorDAO;
     private final CartaoRepositorio cartaoDAO;
     private final FaturaRepositorio faturaDAO;
+    private final PropostaService propostaService;
 
     @Autowired
-    public PortadorEndpoint(PortadorRepositorio propostaDAO, CartaoRepositorio cartaoDAO, FaturaRepositorio faturaDAO) {
+    public PortadorEndpoint(PortadorRepositorio propostaDAO, CartaoRepositorio cartaoDAO, FaturaRepositorio faturaDAO, PropostaService propostaService) {
         this.portadorDAO = propostaDAO;
         this.cartaoDAO = cartaoDAO;
         this.faturaDAO = faturaDAO;
+        this.propostaService = propostaService;
     }
 
     @GetMapping
@@ -41,8 +45,11 @@ public class PortadorEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> postPortador(@RequestBody Portador portador){
-        Cartao cartao = new Cartao(portador.getNome());
+    public void postPortador(@RequestBody Proposta proposta){
+
+        propostaService.enviarProposta(proposta);
+
+        /*Cartao cartao = new Cartao(portador.getNome());
         portador.getCartoes().add(cartao);
         cartao.setPortador(portador);
         Fatura fatura = new Fatura();
@@ -56,7 +63,7 @@ public class PortadorEndpoint {
         } catch(Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+        }*/
     }
     @PutMapping(path = "/{id}/addCartao")
     public ResponseEntity<?> putCartao(@PathVariable("id") Long id){

@@ -1,6 +1,6 @@
 package br.com.rotciv.endpoint;
 
-import br.com.rotciv.error.ResourceNotFoundException;
+import br.com.rotciv.throwableResponses.ResourceNotFoundException;
 import br.com.rotciv.model.Cartao;
 import br.com.rotciv.model.Fatura;
 import br.com.rotciv.model.Lancamento;
@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.transaction.Transactional;
 
 @RestController
 @RequestMapping("portadores/cartoes")

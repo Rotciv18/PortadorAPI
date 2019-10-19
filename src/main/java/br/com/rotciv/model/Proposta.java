@@ -1,27 +1,16 @@
 package br.com.rotciv.model;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-@Entity
-public class Portador extends AbstractEntity{
-
+public class Proposta implements Serializable {
     private String nome;
     private String email;
     private String cpf;
     private String dataNascimento;
-    @OneToMany(mappedBy = "portador")
-    private List<Cartao> cartoes = new ArrayList<>();
+    private String nomeDoPai;
+    private String nomeDaMae;
 
-    public Portador() {
-    }
-
-    public Portador(String nome, String email, String cpf, String dataNascimento) {
-        this.nome = nome;
-        this.email = email;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
+    public Proposta() {
     }
 
     public String getNome() {
@@ -56,11 +45,26 @@ public class Portador extends AbstractEntity{
         this.dataNascimento = dataNascimento;
     }
 
-    public List<Cartao> getCartoes() {
-        return cartoes;
+    public String getNomeDoPai() {
+        return nomeDoPai;
     }
 
-    public void setCartoes(List<Cartao> cartoes) {
-        this.cartoes = cartoes;
+    public void setNomeDoPai(String nomeDoPai) {
+        this.nomeDoPai = nomeDoPai;
+    }
+
+    public String getNomeDaMae() {
+        return nomeDaMae;
+    }
+
+    public void setNomeDaMae(String nomeDaMae) {
+        this.nomeDaMae = nomeDaMae;
+    }
+
+    public Portador toPortador(){
+        Portador portador = new Portador(this.nome, this.email, this.cpf,
+                this.dataNascimento);
+
+        return portador;
     }
 }
