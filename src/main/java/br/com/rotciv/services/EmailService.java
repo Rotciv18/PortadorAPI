@@ -17,11 +17,11 @@ public class EmailService {
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("v.rotciv15@gmail.com", "Rot412619921124");
+                return new PasswordAuthentication("mymail@gmail.com", "password");
             }
         });
         Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("v.rotciv15@gmail.com", false));
+        msg.setFrom(new InternetAddress("mymail@gmail.com", false));
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("v.rotciv@hotmail.com"));
         msg.setSubject("Envio de proposta");
