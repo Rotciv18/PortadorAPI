@@ -46,24 +46,7 @@ public class PortadorEndpoint {
 
     @PostMapping
     public void postPortador(@RequestBody Proposta proposta){
-
         propostaService.enviarProposta(proposta);
-
-        /*Cartao cartao = new Cartao(portador.getNome());
-        portador.getCartoes().add(cartao);
-        cartao.setPortador(portador);
-        Fatura fatura = new Fatura();
-        fatura.setCartao(cartao);
-        try {
-            portadorDAO.save(portador);
-            cartaoDAO.save(cartao);
-            faturaDAO.save(fatura);
-
-            return new ResponseEntity<>(portador, HttpStatus.OK);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }*/
     }
     @PutMapping(path = "/{id}/addCartao")
     public ResponseEntity<?> putCartao(@PathVariable("id") Long id){
@@ -78,7 +61,7 @@ public class PortadorEndpoint {
 
         cartaoDAO.save(cartao);
         portadorDAO.save(portador);
-        faturaDAO.save(fatura);
+        //faturaDAO.save(fatura);
         return new ResponseEntity<>(cartao, HttpStatus.OK);
     }
 

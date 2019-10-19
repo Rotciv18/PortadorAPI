@@ -2,6 +2,7 @@ package br.com.rotciv.services;
 
 import br.com.rotciv.PortadorApplication;
 import br.com.rotciv.model.Proposta;
+import br.com.rotciv.throwableResponses.ThrowableOkStatus;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +18,6 @@ public class PropostaService {
     public void enviarProposta(Proposta proposta){
         rabbitTemplate.convertAndSend(PortadorApplication.EXCHANGE_NAME, PortadorApplication.ROUTING_KEY, proposta);
         //rabbitTemplate.convertAndSend(proposta);
+        System.out.println("oi");
     }
 }

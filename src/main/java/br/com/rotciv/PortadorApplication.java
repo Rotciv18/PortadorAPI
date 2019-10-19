@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -29,9 +30,6 @@ public class PortadorApplication {
 
     @Bean
     public Queue defaultParsingQueue(){
-        Map<String, Object> args = new HashMap<>();
-        // set the queue with a dead letter feature
-
         return new Queue(DEFAULT_PARSING_QUEUE);
     }
 
