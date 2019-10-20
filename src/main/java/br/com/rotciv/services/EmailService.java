@@ -8,6 +8,12 @@ import java.util.Date;
 import java.util.Properties;
 
 public class EmailService {
+
+    private static final String EMAIL_FROM = "iluvconductor@gmail.com";
+    private static final String EMAIL_TO = "v.rotciv@hotmail.com";
+    private static final String PASSWORD = "cdt123456";
+
+
     public static void sendmail() throws AddressException, MessagingException, IOException {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -17,19 +23,19 @@ public class EmailService {
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("v.rotciv15@gmail.com", "Rot412619921124");
+                return new PasswordAuthentication(EMAIL_FROM, PASSWORD);
             }
         });
         Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("v.rotciv15@gmail.com", false));
+        msg.setFrom(new InternetAddress(EMAIL_FROM, false));
 
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("v.rotciv@hotmail.com"));
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(EMAIL_TO));
         msg.setSubject("Envio de proposta");
         msg.setContent("Portador cadastrado com sucesso!", "text/html");
         msg.setSentDate(new Date());
 
         MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setContent("Tutorials point email", "text/html");
+        messageBodyPart.setContent(";)", "text/html");
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);

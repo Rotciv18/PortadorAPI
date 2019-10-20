@@ -1,8 +1,6 @@
 package br.com.rotciv.endpoint;
 
 import br.com.rotciv.throwableResponses.ResourceNotFoundException;
-import br.com.rotciv.model.Cartao;
-import br.com.rotciv.model.Fatura;
 import br.com.rotciv.model.Portador;
 import br.com.rotciv.model.Proposta;
 import br.com.rotciv.repository.CartaoRepositorio;

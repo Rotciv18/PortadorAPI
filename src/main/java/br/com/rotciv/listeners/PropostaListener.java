@@ -9,13 +9,7 @@ import br.com.rotciv.repository.CartaoRepositorio;
 import br.com.rotciv.repository.FaturaRepositorio;
 import br.com.rotciv.repository.PortadorRepositorio;
 import br.com.rotciv.services.EmailService;
-import br.com.rotciv.throwableResponses.ResourceNotFoundException;
-import br.com.rotciv.throwableResponses.ThrowableOkStatus;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.support.AmqpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
