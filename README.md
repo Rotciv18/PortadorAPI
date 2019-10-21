@@ -5,7 +5,7 @@ A aplicação em questão é uma API que satisfaz o diagrama a seguir: </br>
 ![diagramaAPI](https://github.com/Rotciv18/PortadorAPI/blob/master/diagramaAPI.png)
 </br>
 ## Funcionalidades
-A princípio, um usuário pode fazer, a partir de uma requisição POST, o cadatro de um Portador enviando uma Proposta. Com pelo menos um portador cadastrado, a aplicação pode ser usada para requisições GET, POST, PUT, DEL das entidades Portador, Cartão e Lançamento (apenas GET para Fatura). Em algumas requisições será necessária autenticação do usuário.</br>
+A princípio, um usuário pode fazer, a partir de uma requisição POST, o cadatro de um Portador enviando uma Proposta. Com pelo menos um portador cadastrado, a aplicação pode ser usada para requisições GET, POST, PUT, DEL das entidades Portador, Cartão e Lançamento (apenas GET para Fatura). Algumas poucas requisições podem ser feitas através [desta aplicação FrontEnd](https://github.com/Rotciv18/PortadorFront). Existem requisições onde será necessária autenticação do usuário. </br>
 Ao tentar cadastrar um Portador, a proposta é enviada para uma fila e será eventualmente processada. No momento que um portador é cadastrado com sucesso, um e-mail será enviado confirmando o cadastro.</br>
 O Portador será vinculado a um cartão no momento em que for cadastrado, mas há a possibilidade de ter mais de um cartão. <br>
 Por fim, um portador pode realizar uma compra utilizando um de seus cartões, havendo uma lista de Lançamentos vinculadas a cada cartão.</br>
