@@ -53,13 +53,13 @@ O modelo User também existirá no DB como uma tabela apenas para guardar dados 
 #### Para E-Mail
 Modelo simples para simplificar os códigos para envio de e-mail. Não utilizado no banco de dados.
 ### Banco de Dados
-Como banco de dados para armazenar todos os dados passados pelas requisições, foi utilizado o PostgreSQL. Nele haverão 5 tabelas: Portador, Cartao, Lancamento, Fatura e User. Cada tabela terá todas as chaves equivalente aos atributos de suas respectivas entidades, com algumas exceções.
+Como banco de dados para armazenar todos os dados passados pelas requisições, foi utilizado o PostgreSQL. Nele haverão 5 tabelas: Portador, Cartao, Lancamento, Fatura e User. Cada tabela terá todas as chaves equivalente aos atributos de suas respectivas entidades, com algumas exceções.</br> Configurações entre a aplicação e o postgre estão em .propoerties.
 ### Segurança
-Para a segurança da aplicação, foi utilizado o AntMatchers do Spring Security. Todas as URL's com 'protected' só podem ser acessadas pelo admin. O usuário admin deve estar cadastrado na tabela 'user' do banco de dados.
+Para a segurança da aplicação, foi utilizado o AntMatchers do Spring Security. Todas as URL's com 'protected' só podem ser acessadas pelo admin. O usuário admin deve estar cadastrado na tabela 'user' do banco de dados, e sua senha estar criptografada pelo BCrypt.
 ### AMQP
 RabbitMQ foi utilizado para resolver o problema de protocolo de envio de mensagens para o cadastro do Portador.
 ### FrontEnd
-Uma aplicação simples FrontEnd foi implementada utilizando Angular 6+, com componentes básicos para facilitar algumas requisições POST. 
+Uma [aplicação simples FrontEnd](https://github.com/Rotciv18/PortadorFront) foi implementada utilizando Angular 6+, com componentes básicos para facilitar algumas requisições POST. 
 
 ## Dificuldades Encontradas
 Quase tudo foi muito novo para mim então tive algumas dificuldades várias vezes enquanto aprendia as funcionalidades. Embora Spring Boot seja fácil e simples, cometi alguns erros bobos que me custaram um tempo para descobri-los (esquecimento de colocar anotações como @CrossOrigin, por exemplo).</br>
