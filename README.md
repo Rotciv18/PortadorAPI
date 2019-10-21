@@ -54,6 +54,7 @@ O modelo User também existirá no DB como uma tabela apenas para guardar dados 
 Modelo simples para simplificar os códigos para envio de e-mail. Não utilizado no banco de dados.
 ### Banco de Dados
 Como banco de dados para armazenar todos os dados passados pelas requisições, foi utilizado o PostgreSQL. Nele haverão 5 tabelas: Portador, Cartao, Lancamento, Fatura e User. Cada tabela terá todas as chaves equivalente aos atributos de suas respectivas entidades, com algumas exceções.</br> Configurações entre a aplicação e o postgre estão em .propoerties.
+![dbExample](https://github.com/Rotciv18/PortadorAPI/blob/master/dbExample.jpeg)
 ### Segurança
 Para a segurança da aplicação, foi utilizado o AntMatchers do Spring Security. Todas as URL's com 'protected' só podem ser acessadas pelo admin. O usuário admin deve estar cadastrado na tabela 'user' do banco de dados, e sua senha estar criptografada pelo BCrypt.
 ### AMQP
