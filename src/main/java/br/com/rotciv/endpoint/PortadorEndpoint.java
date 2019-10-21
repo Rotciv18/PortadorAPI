@@ -1,10 +1,9 @@
 package br.com.rotciv.endpoint;
 
-import br.com.rotciv.throwableResponses.ResourceNotFoundException;
+import br.com.rotciv.error.ResourceNotFoundException;
 import br.com.rotciv.model.Portador;
 import br.com.rotciv.model.Proposta;
 import br.com.rotciv.repository.CartaoRepositorio;
-import br.com.rotciv.repository.FaturaRepositorio;
 import br.com.rotciv.repository.PortadorRepositorio;
 import br.com.rotciv.services.PropostaService;
 import org.springframework.beans.factory.annotation.Autowired;

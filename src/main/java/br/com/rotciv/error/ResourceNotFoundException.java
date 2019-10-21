@@ -1,4 +1,4 @@
-package br.com.rotciv.throwableResponses;
+package br.com.rotciv.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
