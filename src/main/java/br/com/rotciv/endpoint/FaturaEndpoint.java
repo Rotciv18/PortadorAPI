@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("portadores/cartoes/fatura")
+@RequestMapping("v1")
 public class FaturaEndpoint {
     private final FaturaRepositorio faturaDAO;
     private final CartaoRepositorio cartaoDAO;
@@ -23,7 +23,7 @@ public class FaturaEndpoint {
         this.cartaoDAO = cartaoDAO;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("fatura/{id}")
     public ResponseEntity<?> getFaturaByCartaoId (@PathVariable("id") Long id){
         checkCartaoById(id);
 

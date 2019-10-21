@@ -15,39 +15,38 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 
 @RestController
-@RequestMapping("portadores")
+@RequestMapping("v1")
+@CrossOrigin
 public class PortadorEndpoint {
     private final PortadorRepositorio portadorDAO;
     private final CartaoRepositorio cartaoDAO;
-    private final FaturaRepositorio faturaDAO;
     private final PropostaService propostaService;
 
     @Autowired
-    public PortadorEndpoint(PortadorRepositorio propostaDAO, CartaoRepositorio cartaoDAO, FaturaRepositorio faturaDAO, PropostaService propostaService) {
+    public PortadorEndpoint(PortadorRepositorio propostaDAO, CartaoRepositorio cartaoDAO, PropostaService propostaService) {
         this.portadorDAO = propostaDAO;
         this.cartaoDAO = cartaoDAO;
-        this.faturaDAO = faturaDAO;
         this.propostaService = propostaService;
     }
 
-    @GetMapping
+    @GetMapping("portador")
     public ResponseEntity<?> getPortadores(){
         return new ResponseEntity<>(portadorDAO.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "portador/{id}")
     public ResponseEntity<?> getPortadorById(@PathVariable("id") Long id){
         checkPortadorById(id);
 
         return new ResponseEntity<>(portadorDAO.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("portador/add")
     public void postPortador(@RequestBody Proposta proposta){
         propostaService.enviarProposta(proposta);
     }
 
-    @PutMapping
+    @PutMapping(path = "protected/portador/edit")
     public ResponseEntity<?> editPortador(@RequestBody Portador portador){
         checkPortadorById(portador.getId());
 
@@ -55,7 +54,7 @@ public class PortadorEndpoint {
     }
 
     @Transactional
-    @DeleteMapping("/{id}")
+    @DeleteMapping("protected/portador/delete/{id}")
     public ResponseEntity<?> deletePortador(@PathVariable("id") Long id){
         checkPortadorById(id);
 

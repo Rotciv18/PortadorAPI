@@ -12,7 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("portadores/cartoes")
+@RequestMapping("v1")
+@CrossOrigin
 public class CartaoEndpoint {
     private final CartaoRepositorio cartaoDAO;
     private final PortadorRepositorio portadorDAO;
@@ -23,12 +24,12 @@ public class CartaoEndpoint {
         this.portadorDAO = portadorDAO;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("cartao/{id}")
     public ResponseEntity<?> getCartaoById(@PathVariable("id") Long id){
         return new ResponseEntity<>(cartaoDAO.findById(id), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/{id}/addCartao")
+    @PostMapping("cartao/add/{id}")
     public ResponseEntity<?> addCartaoByPortadorId(@PathVariable("id") Long id){
         checkPortadorById(id);
 
@@ -45,7 +46,7 @@ public class CartaoEndpoint {
         return new ResponseEntity<>(cartao, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("protected/cartao/desativar/{id}")
     public ResponseEntity<?> desativarCartaoById(@PathVariable("id") Long id){
         checkCartaoById(id);
 
@@ -55,14 +56,14 @@ public class CartaoEndpoint {
         return new ResponseEntity<>(cartaoDAO.save(cartao), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> editCartaoById(@RequestBody Cartao cartao){
+    @PutMapping("protected/cartao/edit")
+    public ResponseEntity<?> editCartao(@RequestBody Cartao cartao){
         checkCartaoById(cartao.getId());
 
         return new ResponseEntity<>(cartaoDAO.save(cartao), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/ativar")
+    @PutMapping("cartao/ativar/{id}")
     public ResponseEntity<?> ativarCartaoById(@PathVariable("id") Long id){
         checkCartaoById(id);
 

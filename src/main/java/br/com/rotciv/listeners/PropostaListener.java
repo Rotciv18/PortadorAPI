@@ -20,12 +20,10 @@ public class PropostaListener {
 
     private final PortadorRepositorio portadorDAO;
     private final CartaoRepositorio cartaoDAO;
-    private final FaturaRepositorio faturaDAO;
 
     public PropostaListener(PortadorRepositorio portadorDAO, CartaoRepositorio cartaoDAO, FaturaRepositorio faturaDAO) {
         this.portadorDAO = portadorDAO;
         this.cartaoDAO = cartaoDAO;
-        this.faturaDAO = faturaDAO;
     }
 
     @RabbitListener(queues = PortadorApplication.DEFAULT_PARSING_QUEUE)

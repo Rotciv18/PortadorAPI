@@ -16,7 +16,5 @@ public class PropostaService {
 
     public void enviarProposta(Proposta proposta){
         rabbitTemplate.convertAndSend(PortadorApplication.EXCHANGE_NAME, PortadorApplication.ROUTING_KEY, proposta);
-        //rabbitTemplate.convertAndSend(proposta);
-        System.out.println("oi");
     }
 }

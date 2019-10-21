@@ -13,7 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("portadores/cartoes")
+@RequestMapping("v1")
+@CrossOrigin
 public class LancamentoEndpoint {
     private final CartaoRepositorio cartaoDAO;
     private final LancamentoRepositorio lancamentoDAO;
@@ -26,15 +27,15 @@ public class LancamentoEndpoint {
         this.faturaDAO = faturaDAO;
     }
 
-    @GetMapping("/{id}/lancamentos")
+    @GetMapping("lancamento/{id}")
     public ResponseEntity<?> getLancamentosByCartaoId(@PathVariable("id") Long id){
         checkCartaoById(id);
 
         return new ResponseEntity<>(lancamentoDAO.findAllByCartaoId(id), HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/addlancamento")
-    public ResponseEntity<?> putLancamento(@PathVariable("id") Long id, @RequestBody Lancamento lancamento){
+    @PostMapping("lancamento/add/{id}")
+    public ResponseEntity<?> postLancamentoByCartaoId(@PathVariable("id") Long id, @RequestBody Lancamento lancamento){
         checkCartaoById(id);
 
         Cartao cartao = cartaoDAO.findById(id).get();
@@ -54,30 +55,27 @@ public class LancamentoEndpoint {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/{lanc_id}")
-    public ResponseEntity<?> deleteLancamentoByCartaoIdAndLancamentoId(@PathVariable("id")Long id,
-                                                                       @PathVariable("lanc_id")Long lanc_id){
+    @DeleteMapping("lancamento/delete/{id}")
+    public ResponseEntity<?> deleteLancamentoById(@PathVariable("id")Long id){
 
-        checkCartaoById(id);
-        checkLancamentoById(lanc_id);
-        isCartaoAtivo(cartaoDAO.findById(id).get());
+        checkLancamentoById(id);
+        Long cartao_id = lancamentoDAO.findById(id).get().getCartao().getId();
+        isCartaoAtivo(cartaoDAO.findById(cartao_id).get());
 
-        lancamentoDAO.deleteById(lanc_id);
-        Fatura fatura = faturaDAO.findByCartaoId(id);
+        lancamentoDAO.deleteById(id);
+        Fatura fatura = faturaDAO.findByCartaoId(cartao_id);
         fatura.atualizaValorTotal();
         faturaDAO.save(fatura);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> editLancamentoByCartaoId (@PathVariable("id")Long id,
-                                                       @RequestBody Lancamento lancamento){
+    @PutMapping("protected/lancamento/edit")
+    public ResponseEntity<?> editLancamentoByCartaoId (@RequestBody Lancamento lancamento){
 
-        checkCartaoById(id);
         checkLancamentoById(lancamento.getId());
 
         lancamentoDAO.save(lancamento);
-        Fatura fatura = faturaDAO.findByCartaoId(id);
+        Fatura fatura = faturaDAO.findByCartaoId(lancamento.getCartao().getId());
         fatura.atualizaValorTotal();
 
         return new ResponseEntity<>(lancamento, HttpStatus.OK);
